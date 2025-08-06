@@ -1,0 +1,9 @@
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\bin\Debug\Projects.dll
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\bin\Debug\Projects.pdb
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\obj\Debug\Projects.csproj.AssemblyReference.cache
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\obj\Debug\Projects.csproj.CoreCompileInputs.cache
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\obj\Debug\Projects.dll
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\obj\Debug\Projects.pdb
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\Users\anvva\OneDrive\Рабочий стол\C#\Projects\obj\Debug\Projects.csproj.CopyComplete
