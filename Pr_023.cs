@@ -16,7 +16,7 @@ using Document = Autodesk.Revit.DB.Document;
 namespace Projects
 {
     [TransactionAttribute(TransactionMode.Manual)]
-    internal class Pr_019 : IExternalCommand
+    internal class Pr_023 : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -25,21 +25,26 @@ namespace Projects
             Document doc = uidoc.Document;
 
 
-            using (Transaction tx = new Transaction(doc, "Move"))
+            using (Transaction tx = new Transaction(doc, "Rotate"))
             {
                 tx.Start();
 
                 Reference pickedObj = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element);
-                String eleId = pickedObj.ElementId.ToString();
+                ElementId eleId = pickedObj.ElementId;
 
                 if (pickedObj == null)
                 {
                     TaskDialog.Show("Ошибка", "No object selected.");
                     return Result.Cancelled;
                 }
-                XYZ newPlace = new XYZ(10, 20, 0);
 
-                ElementTransformUtils.MoveElement(doc, pickedObj.ElementId, newPlace);
+                XYZ p1 = new XYZ(0, 0, 0);
+                XYZ p2 = new XYZ(10, 10, 10);
+                Line axis = Line.CreateBound(p1, p2);
+
+                double angleInRadians = (Math.PI / 180) * 90;
+
+                ElementTransformUtils.RotateElement(doc, eleId, axis, angleInRadians);
 
                 tx.Commit();
             }

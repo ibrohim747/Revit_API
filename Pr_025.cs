@@ -11,12 +11,13 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using Document = Autodesk.Revit.DB.Document;
 
 namespace Projects
 {
     [TransactionAttribute(TransactionMode.Manual)]
-    internal class Pr_019 : IExternalCommand
+    internal class Pr_025 : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -25,21 +26,20 @@ namespace Projects
             Document doc = uidoc.Document;
 
 
-            using (Transaction tx = new Transaction(doc, "Move"))
+            using (Transaction tx = new Transaction(doc, "Create Grid"))
             {
                 tx.Start();
 
-                Reference pickedObj = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element);
-                String eleId = pickedObj.ElementId.ToString();
+                // Находим тип вида для 3D
+                ViewFamilyType viewFamilyType3D = new FilteredElementCollector(doc)
+                    .OfClass(typeof(ViewFamilyType))
+                    .Cast<ViewFamilyType>()
+                    .FirstOrDefault(x => x.ViewFamily == ViewFamily.ThreeDimensional);
 
-                if (pickedObj == null)
+                if (viewFamilyType3D != null)
                 {
-                    TaskDialog.Show("Ошибка", "No object selected.");
-                    return Result.Cancelled;
+                    View3D Bob = View3D.CreateIsometric(doc, viewFamilyType3D.Id);
                 }
-                XYZ newPlace = new XYZ(10, 20, 0);
-
-                ElementTransformUtils.MoveElement(doc, pickedObj.ElementId, newPlace);
 
                 tx.Commit();
             }

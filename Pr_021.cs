@@ -16,7 +16,7 @@ using Document = Autodesk.Revit.DB.Document;
 namespace Projects
 {
     [TransactionAttribute(TransactionMode.Manual)]
-    internal class Pr_019 : IExternalCommand
+    internal class Pr_021 : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -25,21 +25,19 @@ namespace Projects
             Document doc = uidoc.Document;
 
 
-            using (Transaction tx = new Transaction(doc, "Move"))
+            using (Transaction tx = new Transaction(doc, "Delete"))
             {
                 tx.Start();
 
                 Reference pickedObj = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element);
-                String eleId = pickedObj.ElementId.ToString();
+                ElementId eleId = pickedObj.ElementId;
 
                 if (pickedObj == null)
                 {
                     TaskDialog.Show("Ошибка", "No object selected.");
                     return Result.Cancelled;
                 }
-                XYZ newPlace = new XYZ(10, 20, 0);
-
-                ElementTransformUtils.MoveElement(doc, pickedObj.ElementId, newPlace);
+                doc.Delete(eleId);
 
                 tx.Commit();
             }
