@@ -13,7 +13,7 @@ using System.Xml;
 namespace Projects
 {
     [TransactionAttribute(TransactionMode.Manual)]
-    internal class Pr_033 : IExternalCommand
+    internal class Pr_034 : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -21,7 +21,7 @@ namespace Projects
             UIDocument uidoc = commandData.Application.ActiveUIDocument;
             Document doc = uidoc.Document;
 
-            using (Transaction tx = new Transaction(doc, "Change Parameter"))
+            using (Transaction tx = new Transaction(doc, "Distance"))
             {
                 tx.Start();
 
@@ -31,23 +31,21 @@ namespace Projects
 
                 LocationCurve wallLine = elem.Location as LocationCurve;
 
-                List<XYZ> points = new List<XYZ>();
+                double distance = new double();
 
                 if (wallLine != null)
                 {
                     Curve curve = wallLine.Curve;
-                    points.Add(curve.GetEndPoint(0)); // Начало линии
-                    points.Add(curve.GetEndPoint(1)); // Конец линии
+                    XYZ p1 = curve.GetEndPoint(0); // Начало линии
+                    XYZ p2 = curve.GetEndPoint(1); // Конец линии
+                    distance = p1.DistanceTo(p2); // в Revit API уже есть готовый метод
                 }
-
-                // Преобразуем список точек в текст
-                string msg = string.Join(Environment.NewLine, points.Select(p => $"X:{p.X:F2}, Y:{p.Y:F2}, Z:{p.Z:F2}"));    //Координты стены
 
                 Double length = wallLine.Curve.Length;    //Длина стены
 
-                TaskDialog dialog = new TaskDialog("Pr_032");
-                dialog.MainInstruction = "Точки кривой:";
-                dialog.MainContent = length.ToString();
+                TaskDialog dialog = new TaskDialog("Pr_034");
+                dialog.MainInstruction = "Distance";
+                dialog.MainContent = distance.ToString();
                 dialog.CommonButtons = TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel;
                 dialog.DefaultButton = TaskDialogResult.Ok;
 
